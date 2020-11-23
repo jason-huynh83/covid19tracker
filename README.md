@@ -18,11 +18,11 @@
 - Resolved Vs. Deaths Vs. Total Cases
 
 # Visuals
-![Images/Daily.PNG]
-![Images/City.PNG]
-![Images/Patients.PNG]
-![Images/Agee.PNG]
-![Images/Acq.PNG]
-![Images/out.PNG]
-![Images/gender.PNG]
-![Images/total.PNG]
+![Daily Cases](Images/Daily.PNG)
+![Cases by City](Images/City.PNG)
+![Patients in Hospital](Images/Patients.PNG)
+![Cases by Age](Images/Agee.PNG)
+![Cases by Acquisition](Images/Acq.PNG)
+![Outcome](Images/out.PNG)
+![Cases by Gender](Images/gender.PNG)
+![Total Cases](Images/total.PNG)
