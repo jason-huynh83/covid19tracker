@@ -7,14 +7,12 @@ Created on Fri Nov 20 21:40:30 2020
 
 import pandas as pd
 import plotly.express as px  # (version 4.7.0)
-import plotly.graph_objects as go
 import requests
 import dash  # (version 1.12.0) pip install dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 import matplotlib.pyplot as plt
-import plotly.graph_objects as go
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -60,8 +58,10 @@ def daily_cases(df1):
 df, df_cases, df1 = read_in_csv(links) 
 
 fig = px.bar(df_cases,y='Daily Cases',title='Daily Cases in Ontario')
-fig1 = px.bar(df1,x='Reported Date',y=['Number of patients hospitalized with COVID-19','Number of patients in ICU with COVID-19',
-                                'Number of patients in ICU on a ventilator with COVID-19'],title='Patients in Hospital')
+fig1 = px.bar(df1,x='Reported Date', y=['Number of patients hospitalized with COVID-19',
+                                       'Number of patients in ICU with COVID-19',
+                                       'Number of patients in ICU on a ventilator with COVID-19'],
+                                      title='Patients in Hospital')
 
 lst = ['Age_Group', 'Case_AcquisitionInfo', 'Outcome1', 'Client_Gender','Reporting_PHU_City']
 
@@ -93,6 +93,7 @@ fig7=px.line(df1, x='Reported Date', y=['Resolved','Deaths','Total Cases'],title
 app.layout = html.Div([
 
     html.H1("Ontario Covid-19 Tracking", style={'text-align': 'center'}),
+    html.H3('The number of cases today ({}) is {}'.format(df1['Reported Date'].iloc[-1],int(df1['Daily Cases'].iloc[-1]))),
     
     dcc.Graph(figure=fig),
     dcc.Graph(figure=fig6),
@@ -114,17 +115,13 @@ app.layout = html.Div([
     [Output(component_id='display-value', component_property='children')],
      [Input(component_id='my_bee_map', component_property='figure')]
 )
+
 def update_graph(df):
+    container = 'The number of cases today is: {}'.format(df1['Daily Cases'].iloc[-1:].values)
 
-    dff = df.copy()
-    dff1 = df1.copy()
-    df_cases1 = df_cases.copy()
-    
-    fig = px.bar(df_cases1,y='Daily Cases')
-
-    return fig
-
+    return container
 '''
+
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
     app.run_server(debug=True)
