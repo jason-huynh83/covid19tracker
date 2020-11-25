@@ -94,6 +94,7 @@ app.layout = html.Div([
 
     html.H1("Ontario Covid-19 Tracking", style={'text-align': 'center'}),
     html.H3('The number of cases today ({}) is {}'.format(df1['Reported Date'].iloc[-1],int(df1['Daily Cases'].iloc[-1]))),
+    html.H3('The total number of tests completed in the last day was {}'.format(int(df1['Total tests completed in the last day'].iloc[-1]))),
     
     dcc.Graph(figure=fig),
     dcc.Graph(figure=fig6),
