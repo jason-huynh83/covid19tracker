@@ -18,6 +18,7 @@
 - Resolved Vs. Deaths Vs. Total Cases
 
 # Visuals
+![Forecasted ARIMA Model](Images/forecast.PNG)
 ![Daily Cases](Images/Daily.PNG)
 ![Cases by City](Images/City.PNG)
 ![Patients in Hospital](Images/Patients.PNG)
