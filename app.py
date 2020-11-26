@@ -197,8 +197,7 @@ def main():
     
     return df1, a_dict, fig, fig1, fig2, arima, df_forecast
     
-if __name__ == '__main__':
-    df1, a_dict, fig, fig1, fig2, arima, df_forecast = main()
+df1, a_dict, fig, fig1, fig2, arima, df_forecast = main()
 
 # ------------------------------------------------------------------------------
 # App layout
