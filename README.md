@@ -19,7 +19,7 @@
 
 # Visuals
 ![Forecasted ARIMA Model](Images/forecast.PNG)
-![Daily Cases](Images/Daily.PNG)
+![Daily Cases](Images/Daily_cases.PNG)
 ![Cases by City](Images/City.PNG)
 ![Patients in Hospital](Images/Patients.PNG)
 ![Cases by Age](Images/Agee.PNG)
