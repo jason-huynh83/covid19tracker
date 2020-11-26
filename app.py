@@ -6,6 +6,7 @@ Created on Fri Nov 20 21:40:30 2020
 """
 
 import pandas as pd
+import numpy as np
 import plotly.express as px  # (version 4.7.0)
 import plotly
 import plotly.graph_objs as go
