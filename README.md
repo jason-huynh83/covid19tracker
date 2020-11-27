@@ -4,6 +4,9 @@
 - The web app provides a daily update of cases in Ontario
 - It also includes interactive plots of various statistics regarding COVID-19 in Ontario
 
+# Forecast
+- Current as of November 26th 2020, my model forecasts COVID-19 cases in Ontario to roam around the 2000 cases per day margin in December.
+
 # The Dataset
 - The dataset used for this tracker is from the Ontario dataset and can be found [here](https://data.ontario.ca/dataset)
 
