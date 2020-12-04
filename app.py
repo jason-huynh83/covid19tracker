@@ -2,7 +2,7 @@
 """
 Created on Fri Nov 20 21:40:30 2020
 
-@author: User
+@author: Jason
 """
 
 import pandas as pd
@@ -161,7 +161,7 @@ class Model:
         )
 
         data = [trace_train, trace_forecast, trace_upperbound, trace_lowerbound]
-        layout = go.Layout(title="Forecasted ARIMA model",xaxis_rangeslider_visible=True)
+        layout = go.Layout(title="Forecasted ARIMA model for next 30 days",xaxis_rangeslider_visible=True)
         arima = go.Figure(data=data,layout=layout)
 
         return arima, self.yday_forecast()       
@@ -202,12 +202,82 @@ class Model:
         df_forecast = df_forecast.iloc[-30:-28,:]
         return df_forecast
     
+    def nov_forecast(self):
+        global date
+        dates = []
+        date = date.today() - timedelta(23)
+        for i in range(30):
+            date += timedelta(days=1)
+            dates.append(date)
+    
+        date_series = pd.Series(dates)
+    
+        model = ARIMA(self.df_cases['Daily Cases'][:-23], order=(3, 1, 2))  
+        fitted = model.fit(disp=-1)  
+    
+        # Forecast
+        fc, se, conf = fitted.forecast(30, alpha=0.05)  # 95% conf
+    
+        # Make as pandas series
+        fc_series = pd.Series(fc, index=date_series)
+        lower_series = pd.Series(conf[:, 0], index=date_series)
+        upper_series = pd.Series(conf[:, 1], index=date_series)
+    
+        trace_train = go.Scatter(
+        x = self.df_cases.index,
+        y = self.df_cases['Daily Cases'],
+        mode = 'lines',
+        line = {'color':'blue'},
+        name="Number of Cases"
+        )
+    
+        trace_track = go.Scatter(
+        x = self.df_cases.index[-23:],
+        y = self.df_cases['Daily Cases'].iloc[-23:],
+        mode = 'lines',
+        line = {'color':'orange'},
+        name="Number of Cases Since Forecast"
+        )
+    
+        trace_forecast = go.Scatter(
+            x = fc_series.index,
+            y= fc_series.astype(int),
+            mode = 'lines',
+            line = {'color':'red'},
+            name = 'Forecast'
+        )
+    
+        trace_upperbound = go.Scatter(
+            x = upper_series.index,
+            y= upper_series.astype(int),
+            mode = 'lines',
+            fill = 'tonexty',
+            line = {'color':'gray'},
+            name = 'upperbound'
+        )
+    
+        trace_lowerbound = go.Scatter(
+            x = lower_series.index,
+            y= lower_series.astype(int),
+            mode = 'lines',
+            fill = 'tonexty',
+            line = {'color':'gray'},
+            name = 'lowerbound'
+        )
+    
+        data = [trace_train, trace_track, trace_forecast, trace_upperbound, trace_lowerbound]
+        layout = go.Layout(title="Forecasted ARIMA model",xaxis_rangeslider_visible=True)
+        arima = go.Figure(data=data,layout=layout)
+    
+        return arima
+        
 # Calls
 model = Model(links)
 df1 = model.df_transformations()
 a_dict = model.plot_graphs()
 fig, fig1, fig2 = model.plot_graphs2()
 arima, df_forecast = model.arima_series()
+nov_arima = model.nov_forecast()
 
 # ------------------------------------------------------------------------------
 # App layout
@@ -224,18 +294,36 @@ app.layout = html.Div([
     data=df_forecast.to_dict('records'),
     ),
     
-    dcc.Graph(figure=arima),
-    dcc.Graph(figure=fig),
-    dcc.Graph(figure=a_dict['fig4']),
-    dcc.Graph(figure=fig1),
-    dcc.Graph(figure=a_dict['fig0']),
-    dcc.Graph(figure=a_dict['fig1']),
-    dcc.Graph(figure=a_dict['fig2']),
-    dcc.Graph(figure=a_dict['fig3']),
-    dcc.Graph(figure=fig2)
+    html.Div([
+            html.Div([
+                dcc.Graph(id='g1',figure=nov_arima)
+        
+        ], className='six columns'),
+            html.Div([
+                dcc.Graph(id='g2',figure=arima)
+                ], className='six columns'),
 
+        ], className='row'),
+    
+    html.Div([
+        html.Div([
+            dcc.Graph(figure=fig)
+    
+    ], className='six columns'),
+        html.Div([
+            dcc.Graph(figure=a_dict['fig4'])
+            ], className='six columns'),
+
+    ], className='row'),
+           
+            
+            dcc.Graph(figure=fig1),
+            dcc.Graph(figure=a_dict['fig0']),
+            dcc.Graph(figure=a_dict['fig1']),
+            dcc.Graph(figure=a_dict['fig2']),
+            dcc.Graph(figure=a_dict['fig3']),
+            dcc.Graph(figure=fig2)
 ])
-
 
 # ------------------------------------------------------------------------------
 # Connect the Plotly graphs with Dash Components
