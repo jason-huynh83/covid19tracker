@@ -55,6 +55,7 @@ class Model:
             files.append(str(link).split('/')[8])
         self.df = pd.read_csv(files[0])
         self.df1 = pd.read_csv(files[1])
+        self.df1.drop_duplicates(inplace=True)
         
         return self.df_transformations()
 
